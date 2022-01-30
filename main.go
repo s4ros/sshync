@@ -75,6 +75,7 @@ func addToArchive(tw *tar.Writer, filename string) error {
 	err = tw.WriteHeader(header)
 	_error(err)
 
+	fmt.Println("Archiving:", filename)
 	_, err = io.Copy(tw, fd)
 	_error(err)
 
