@@ -24,13 +24,9 @@ func main() {
 	t := time.Now().UnixMilli()
 	out := fmt.Sprint("ssh-archive-", t, ".tar")
 
-	fd_out, err := os.Create(out)
-	_error(err)
-	defer fd_out.Close()
-
 	filenames := getAllFiles(src)
 
-	err = createArchive(fd_out, filenames)
+	err = createArchive(out, filenames)
 	_error(err)
 }
 
@@ -48,8 +44,12 @@ func getAllFiles(root string) []string {
 	return filenames
 }
 
-func createArchive(out io.Writer, filenames []string) error {
-	tw := tar.NewWriter(out)
+func createArchive(out string, filenames []string) error {
+	fd_out, err := os.Create(out)
+	_error(err)
+	defer fd_out.Close()
+
+	tw := tar.NewWriter(fd_out)
 	defer tw.Close()
 
 	for _, file := range filenames {
